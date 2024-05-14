@@ -1,26 +1,50 @@
-import { SafeAreaView, Text, View, TouchableOpacity } from 'react-native';
+import { SafeAreaView, Text, View, TouchableOpacity, TextInput } from 'react-native';
 import tw, { useDeviceContext } from 'twrnc';
 import { Provider } from 'react-redux';
 import { store } from './store';
-import 'react-native-reanimated'; 
-//import { useAddNoteMutation, useDeleteNoteMutation, useFetchNotesQuery, useSearchNotesQuery, useUpdateNoteMutation } from './db';
+import { AntDesign } from '@expo/vector-icons';
+import MasonryList from '@react-native-seoul/masonry-list';
+import { useAddNoteMutation, useDeleteNoteMutation, useFetchNotesQuery, useSearchNotesQuery, useUpdateNoteMutation } from './db';
+import { useEffect } from 'react';
 
 function App() {
   useDeviceContext(tw);
+
+  // data prop in flatlist
+  const [notes, setNotes] = useState([]);
+
+  useEffect(() => {
+    setNotes(useFetchNotesQuery().data);
+  }, []);
+  
+  // keyextracter takes in item prop, returns item.id
+  // renderitem takes in item prop and i?, generates the html component to display
+
 
   return (
     <Provider store={store}>
       <SafeAreaView style={tw` h-full bg-lime-950`}>
 
-          <Text style={tw`w-screen h-fit pt-2 pb-3 text-center px-3 text-xl text-white`}>Notes App</Text>
+          <Text style={tw`w-screen pt-3 pb-3 text-center px-3 text-xl font-bold text-white`}>Notes App</Text>
           
-          <View style={tw`w-screen h-full bg-lime-900`}>
+          <View style={tw`flex-1 relative bg-lime-900`}>
+
+            <View style={tw`bg-lime-950 py-1 px-3 my-2 mx-1 rounded-full`}>
+              <TextInput style={tw`py-1 px-2 text-base text-white`} placeholder='Search' placeholderTextColor="white">
+              </TextInput>
+            </View>
+
+            <MasonryList></MasonryList>
             
-            <TouchableOpacity style={tw`rounded-full w-10 h-10 flex items-center text-lime-950 bg-white`}>
-              <Text style={tw`flex items-center h-fit text-center text-2xl`}>+</Text>
+
+            <TouchableOpacity style={tw`absolute bottom-8 right-8`}>
+              <AntDesign name="pluscircle" size={42} color="white" style={tw`text-center`} />
             </TouchableOpacity>
+            
           </View>
-        
+          
+          
+          
       </SafeAreaView>
     </Provider>
   )
