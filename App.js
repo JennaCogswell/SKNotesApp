@@ -11,11 +11,11 @@ function App() {
   useDeviceContext(tw);
 
   // data prop in flatlist
-  const [notes, setNotes] = useState([]);
-
-  useEffect(() => {
-    setNotes(useFetchNotesQuery().data);
-  }, []);
+  const { date } = useFetchNotesQuery();
+  const [addNote] = useAddNoteMutation();
+  const [deleteNote] = useDeleteNoteMutation();
+  const { data } = useSearchNotesQuery();
+  const [updateNote] = useUpdateNoteMutation();
   
   // keyextracter takes in item prop, returns item.id
   // renderitem takes in item prop and i?, generates the html component to display
