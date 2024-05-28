@@ -78,6 +78,15 @@ function EditScreen({ route, navigation }) {
   };
 
   useLayoutEffect(() => {
+    const handleBackAction = () => {
+      if (!title && !content) {
+        deleteNote({
+          id: route.params.data.id,
+        });
+      }
+      navigation.goBack();
+    };
+
     navigation.setOptions({ 
       // create custom textinput component for the note headerTitle to edit title
       headerTitle: () => (
@@ -95,7 +104,14 @@ function EditScreen({ route, navigation }) {
           <AntDesign name="delete" size={24} color="white" />
         </TouchableOpacity>
       ),
-     });
+      headerLeft: () => (
+        <TouchableOpacity onPress={handleBackAction} style={tw`ml-1`}>
+          <AntDesign name="arrowleft" size={24} color="white" />
+        </TouchableOpacity>
+      ),
+      gestureEnabled: false,
+    });
+
   });
 
   // when title or content changed in textinput, update note data
